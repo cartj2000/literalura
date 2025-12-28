@@ -1,5 +1,7 @@
 package com.alura.literalura.model;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -26,6 +28,46 @@ public class Autor {
         this.nombre = datosAutor.nombre();
         this.a_Nacimiento = datosAutor.a_Nacimiento();
         this.a_Fallecimiento = datosAutor.a_fallecimiento();
+    }
+
+    public Long getId() {
+        return Id;
+    }
+
+    public void setId(Long id) {
+        Id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Integer getA_Nacimiento() {
+        return a_Nacimiento;
+    }
+
+    public void setA_Nacimiento(Integer a_Nacimiento) {
+        this.a_Nacimiento = a_Nacimiento;
+    }
+
+    public Integer getA_Fallecimiento() {
+        return a_Fallecimiento;
+    }
+
+    public void setA_Fallecimiento(Integer a_Fallecimiento) {
+        this.a_Fallecimiento = a_Fallecimiento;
+    }
+
+    public Libro getLibro() {
+        return libro;
+    }
+
+    public void setLibro(Libro libro) {
+        this.libro = libro;
     }
 
     @Override

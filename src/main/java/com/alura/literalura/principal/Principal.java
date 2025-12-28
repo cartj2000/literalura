@@ -16,7 +16,7 @@ public class Principal {
     private LibroRepository repositorio;
     private List<DatosLibro> datosLibroList = new ArrayList<>();
     private List<Libro> librosLista;
-    private Optional<Libro> libroBuscado;
+    private String tituloLibro;
 
     public Principal(LibroRepository repository) {
         this.repositorio = repository;
@@ -64,28 +64,38 @@ public class Principal {
         }
     }
 
-    private DatosLibro getDatosLibro() {
+    private Datos getDatosLibro() {
         System.out.println("Por favor escribe el nombre del libro que deseas buscar");
         //Busca los datos generales del libro
-        var nombreLibro = teclado.nextLine();
-        var json = consumoApi.obtenerDatos(URL_BASE + "?search=" + nombreLibro.replace(" ", "+"));
+        tituloLibro = teclado.nextLine();
+        var json = consumoApi.obtenerDatos(URL_BASE + "?search=" + tituloLibro.replace(" ", "+"));
         System.out.println(json);
-        DatosLibro datos = conversor.obtenerDatos(json, DatosLibro.class);
+        Datos datos = conversor.obtenerDatos(json, Datos.class);
         //System.out.println("Datos de la serie: " + datos);
         return datos;
     }
 
     private void buscarLibrosPorTitulo() {
-        DatosLibro datos = getDatosLibro();
-        //datosLibroList.add(datos);
-        Libro libro = new Libro(datos);
+        Datos datos = getDatosLibro();
+        Optional<DatosLibro> libroBuscado = datos.resultados().stream()
+                .filter(l->l.titulo().toUpperCase().contains(tituloLibro.toUpperCase()))
+                .peek(l-> System.out.println("Filtro Mayúscula (m>M)" + l))
+                .findFirst();
+        if(libroBuscado.isPresent()) {
+            System.out.println(" Libro encontrado\n");
+            System.out.println("Los datos son: " + libroBuscado.get());
+        } else {
+            System.out.println("Libro no encontrado");
+        }
+
+        Libro libro = new Libro(libroBuscado.get());
         repositorio.save(libro);
-        System.out.println(datos);
+        System.out.println(libroBuscado.get());
     }
 
     private void menuListarLibrosPorIdioma() {
-        var opcionIdioma = -1;
-        while (opcionIdioma != 0) {
+        var opcionIdioma = "";
+        while (!(opcionIdioma.equals("es")||opcionIdioma.equals("en")||opcionIdioma.equals("fr")||opcionIdioma.equals("pt"))) {
             var menuIdioma = """
                     Ingrese el idioma para buscar los libros:
                     es - español
@@ -94,7 +104,7 @@ public class Principal {
                     pt - portugués
                     """;
             System.out.println(menuIdioma);
-            opcionIdioma = teclado.nextInt();
+            opcionIdioma = teclado.nextLine();
             teclado.nextLine();
 
             switch (opcionIdioma) {
@@ -115,4 +125,33 @@ public class Principal {
             }
         }
     }
+
+    private void listarLibrosRegistrados(){
+
+    };
+
+    private void listarAutoresRegistrados(){
+
+    };
+
+    private void listarAutoresVivos(){
+
+    }
+
+    private void buscarLibrosSPANISH(){
+
+    }
+
+    private void buscarLibrosENGLISH(){
+
+    }
+
+    private void buscarLibrosFRENCH(){
+
+    }
+
+    private void buscarLibrosPORTUGUESE(){
+
+    };
+
 }
