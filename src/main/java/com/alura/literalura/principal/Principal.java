@@ -1,6 +1,79 @@
 package com.alura.literalura.principal;
 
+import com.alura.literalura.model.*;
+import com.alura.literalura.repository.LibroRepository;
+import com.alura.literalura.service.ConsumoAPI;
+import com.alura.literalura.service.ConvierteDatos;
+import java.util.*;
+import java.util.stream.Collectors;
+
 public class Principal {
-    int a;
-    int b;
+
+    private Scanner teclado = new Scanner(System.in);
+    private ConsumoAPI consumoApi = new ConsumoAPI();
+    private static final String URL_BASE = "https://gutendex.com/books/";
+    private ConvierteDatos conversor = new ConvierteDatos();
+    private LibroRepository repositorio;
+    private List<DatosLibro> datosLibroList = new ArrayList<>();
+    private List<Libro> librosLista;
+    private Optional<Libro> libroBuscado;
+
+    public Principal(LibroRepository repository){
+        this.repositorio = repository;
+    }
+
+    public void muestraElMenu() {
+        var opcion = -1;
+        while (opcion != 0) {
+            var menu = """
+                    Elija la opción a través de su número:
+                    1 - buscar libros por título
+                    2 - listar libros registrados
+                    3 - listar autores registrados
+                    4 - listar autores vivos en un determinado año
+                    5 - listar libros por idioma
+                    
+                    0 - Salir
+                    """;
+            System.out.println(menu);
+            opcion = teclado.nextInt();
+            teclado.nextLine();
+
+            switch (opcion) {
+                case 1:
+                    buscarLibrosPorTitulo();
+                    break;
+                case 2:
+                    listarLibrosRegistrados();
+                    break;
+                case 3:
+                    listarAutoresRegistrados();
+                    break;
+                case 4:
+                    listarAutoresVivos();
+                    break;
+                case 5:
+                    menuListarLibrosPorIdioma();
+                    break;
+                case 0:
+                    System.out.println("Cerrando la aplicación...");
+                    break;
+                default:
+                    System.out.println("Opción Inválida");
+            }
+        }
+    }
+
+    private DatosLibro getDatosLibro() {
+        System.out.println("Por favor escribe el nombre del libro que deseas buscar");
+        //Busca los datos generales del libro
+        var nombreLibro = teclado.nextLine();
+        var json = consumoApi.obtenerDatos(URL_BASE + "?search=" + nombreLibro.replace(" ", "+"));
+        System.out.println(json);
+        DatosLibro datos = conversor.obtenerDatos(json, DatosLibro.class);
+        //System.out.println("Datos de la serie: " + datos);
+        return datos;
+    }
+
+
 }
