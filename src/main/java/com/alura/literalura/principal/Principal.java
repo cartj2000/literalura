@@ -18,7 +18,7 @@ public class Principal {
     private List<Libro> librosLista;
     private Optional<Libro> libroBuscado;
 
-    public Principal(LibroRepository repository){
+    public Principal(LibroRepository repository) {
         this.repositorio = repository;
     }
 
@@ -75,5 +75,44 @@ public class Principal {
         return datos;
     }
 
+    private void buscarLibrosPorTitulo() {
+        DatosLibro datos = getDatosLibro();
+        //datosLibroList.add(datos);
+        Libro libro = new Libro(datos);
+        repositorio.save(libro);
+        System.out.println(datos);
+    }
 
+    private void menuListarLibrosPorIdioma() {
+        var opcionIdioma = -1;
+        while (opcionIdioma != 0) {
+            var menuIdioma = """
+                    Ingrese el idioma para buscar los libros:
+                    es - español
+                    en - inglés
+                    fr - francés
+                    pt - portugués
+                    """;
+            System.out.println(menuIdioma);
+            opcionIdioma = teclado.nextInt();
+            teclado.nextLine();
+
+            switch (opcionIdioma) {
+                case "es":
+                    buscarLibrosSPANISH();
+                    break;
+                case "en":
+                    buscarLibrosENGLISH();
+                    break;
+                case "fr":
+                    buscarLibrosFRENCH();
+                    break;
+                case "pt":
+                    buscarLibrosPORTUGUESE();
+                    break;
+                default:
+                    System.out.println("Opción Inválida");
+            }
+        }
+    }
 }
