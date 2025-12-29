@@ -1,5 +1,6 @@
 package com.alura.literalura.model;
 
+import com.alura.literalura.repository.AutorRepository;
 import jakarta.persistence.*;
 import java.util.List;
 import java.util.OptionalDouble;
@@ -13,11 +14,18 @@ public class Libro {
     private Long Id;
     @Column(unique = true)
     private String titulo;
-    @OneToMany(mappedBy = "libro", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    //@OneToMany(mappedBy = "libro", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "libros_autores",
+            joinColumns = @JoinColumn(name = "libro_id"),
+            inverseJoinColumns = @JoinColumn(name = "autor_id")
+    )
     private List<Autor> autoresLista;
     @Enumerated(EnumType.STRING)
     private Categoria idiomas;
     private Double numeroDeDescargas;
+    private AutorRepository autorRepository;
 
     public Libro(){
 
@@ -25,7 +33,7 @@ public class Libro {
 
     public Libro(DatosLibro datosLibro){
         this.titulo = datosLibro.titulo();
-        this.autoresLista = datosLibro.autoresLista().stream()
+        //this.autoresLista = datosLibro.autoresLista().stream()
 
         //List<Autor> autores = new ArrayList<>();
         //for (DatosAutor datosAutor : datosLibro.autoresLista()) {
@@ -36,12 +44,20 @@ public class Libro {
 
                 //.map(datosAutor -> new Autor(datosAutor)) // para generar Autor
 
-                .map(Autor::new)
-                .collect(Collectors.toList());
-        this.autoresLista.forEach(a->a.setLibro(this));
+                //.map(Autor::new)
+                //.collect(Collectors.toList());
+        //this.autoresLista.forEach(a->a.setLibro(this));
         this.idiomas = Categoria.fromString(datosLibro.idiomas().get(0));
         this.numeroDeDescargas = datosLibro.numeroDeDescargas();
-    }
+        List<Autor> autores = datosLibro.autoresLista().stream()
+                .map(datosAutor -> {
+                    return autorRepository
+                            .findByNombre(datosAutor.nombre())
+                            .orElseGet(() -> autorRepository.save(new Autor(datosAutor)));
+                })
+                .toList();
+
+        this.autoresLista = autores;    }
 
     public Long getId() {
         return Id;

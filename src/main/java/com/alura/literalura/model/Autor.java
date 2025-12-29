@@ -17,8 +17,10 @@ public class Autor {
     private String nombre;
     private Integer a_Nacimiento;
     private Integer a_Fallecimiento;
-    @ManyToOne
-    private Libro libro;
+    //@ManyToOne
+    //private Libro libro;
+    @ManyToMany(mappedBy = "autoresLista")
+    private List<Libro> libros;
 
     public Autor(){
 
@@ -62,12 +64,12 @@ public class Autor {
         this.a_Fallecimiento = a_Fallecimiento;
     }
 
-    public Libro getLibro() {
-        return libro;
+    public List<Libro> getLibros() {
+        return libros;
     }
 
-    public void setLibro(Libro libro) {
-        this.libro = libro;
+    public void setLibros(List<Libro> libros) {
+        this.libros = libros;
     }
 
     @Override
