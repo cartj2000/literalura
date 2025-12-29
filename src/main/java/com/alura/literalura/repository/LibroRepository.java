@@ -7,4 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LibroRepository extends JpaRepository<Libro, Long> {
+
+    Optional<String> findByTitulo(String titulo);
+
+
 }

@@ -17,6 +17,7 @@ public class Principal {
     private List<DatosLibro> datosLibroList = new ArrayList<>();
     private List<Libro> librosLista;
     private String tituloLibro;
+    private Optional<String> libroBuscado;
 
     public Principal(LibroRepository repository) {
         this.repositorio = repository;
@@ -84,13 +85,28 @@ public class Principal {
         if(libroBuscado.isPresent()) {
             System.out.println(" Libro encontrado\n");
             System.out.println("Los datos son: " + libroBuscado.get());
+            if(buscarLibroEnDB(libroBuscado.get().titulo())) {
+                System.out.println("Libro ya existente");
+            } else {
+                Libro libro = new Libro(libroBuscado.get());
+                repositorio.save(libro);
+                System.out.println(libroBuscado.get());
+            }
+
         } else {
             System.out.println("Libro no encontrado");
         }
 
-        Libro libro = new Libro(libroBuscado.get());
-        repositorio.save(libro);
-        System.out.println(libroBuscado.get());
+    }
+
+    private boolean buscarLibroEnDB(String tituloEnBD){
+        libroBuscado = repositorio.findByTitulo(tituloEnBD);
+        if(libroBuscado.isPresent()){
+            if(libroBuscado.equals(tituloEnBD));
+            return true;
+        } else{
+            return false;
+        }
     }
 
     private void menuListarLibrosPorIdioma() {
