@@ -17,7 +17,7 @@ public class Principal {
     private List<DatosLibro> datosLibroList = new ArrayList<>();
     private List<Libro> librosLista;
     private String tituloLibro;
-    private Optional<String> libroBuscado;
+    private Optional<String> libroBuscadoOptional;
 
     public Principal(LibroRepository repository) {
         this.repositorio = repository;
@@ -65,48 +65,58 @@ public class Principal {
         }
     }
 
-    private Datos getDatosLibro() {
+    private Optional<Datos> getDatosIniciales() {
         System.out.println("Por favor escribe el nombre del libro que deseas buscar");
-        //Busca los datos generales del libro
+        //Busca los datos iniciales
         tituloLibro = teclado.nextLine();
-        var json = consumoApi.obtenerDatos(URL_BASE + "?search=" + tituloLibro.replace(" ", "+"));
-        System.out.println(json);
+        var json = consumoApi.obtenerDatos(
+                URL_BASE + "?search=" +
+                        tituloLibro.replace(" ", "+"));
+        System.out.println("JSON: " + json);
         Datos datos = conversor.obtenerDatos(json, Datos.class);
-        //System.out.println("Datos de la serie: " + datos);
-        return datos;
+
+        if (datos.resultados() == null || datos.resultados().isEmpty()) {
+                return Optional.empty();
+        }
+
+        System.out.println("Datos Iniciales: " + datos);
+        return Optional.of(datos);
     }
 
     private void buscarLibrosPorTitulo() {
-        Datos datos = getDatosLibro();
-        Optional<DatosLibro> libroBuscado = datos.resultados().stream()
-                .filter(l->l.titulo().toUpperCase().contains(tituloLibro.toUpperCase()))
-                .peek(l-> System.out.println("Filtro Mayúscula (m>M)" + l))
-                .findFirst();
-        if(libroBuscado.isPresent()) {
-            System.out.println(" Libro encontrado\n");
-            System.out.println("Los datos son: " + libroBuscado.get());
-            if(buscarLibroEnDB(libroBuscado.get().titulo())) {
-                System.out.println("Libro ya existente");
-            } else {
-                Libro libro = new Libro(libroBuscado.get());
-                repositorio.save(libro);
-                System.out.println(libroBuscado.get());
-            }
-
-        } else {
+        Optional<Datos> datos = getDatosIniciales();
+        if (datos.isEmpty()){
             System.out.println("Libro no encontrado");
+            return;
+        } else {
+            Optional<DatosLibro> libroBuscadoOptional = datos.get().resultados().stream()
+                    .filter(l -> l.titulo().toUpperCase().contains(tituloLibro.toUpperCase()))
+                    .peek(l -> System.out.println("Filtro Mayúscula (m>M)" + l))
+                    .findFirst();
+            if(libroBuscadoOptional.isPresent()) {
+                System.out.println(" Libro encontrado\n");
+                System.out.println("Los datos son: " + libroBuscadoOptional.get());
+                //if(repositorio.existsByTitulo(libroBuscadoOptional.get().titulo())){
+                if(buscarLibroEnDB(libroBuscadoOptional.get().titulo())) {
+                    System.out.println("No se puede registrar el mismo libro más de una vez");
+                } else {
+                    Libro libro = new Libro(libroBuscadoOptional.get());
+                    repositorio.save(libro);
+                    System.out.println("----- LIBRO -----\n");
+                    System.out.println("Título: " + libroBuscadoOptional.get().titulo() + "\n");
+                    System.out.println("Autor: " + libroBuscadoOptional.get().autoresLista() + "\n");
+                    System.out.println("Idioma: " + libroBuscadoOptional.get().idiomas() + "\n");
+                    System.out.println("Número de descargas: " + libroBuscadoOptional.get().numeroDeDescargas() + "\n");
+                    System.out.println("-----------------\n");
+                }
+            } else {
+                System.out.println("Libro no encontrado");
+            }
         }
-
     }
 
     private boolean buscarLibroEnDB(String tituloEnBD){
-        libroBuscado = repositorio.findByTitulo(tituloEnBD);
-        if(libroBuscado.isPresent()){
-            if(libroBuscado.equals(tituloEnBD));
-            return true;
-        } else{
-            return false;
-        }
+        return repositorio.findByTitulo(tituloEnBD).isPresent();
     }
 
     private void menuListarLibrosPorIdioma() {
