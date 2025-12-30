@@ -25,7 +25,6 @@ public class Libro {
     @Enumerated(EnumType.STRING)
     private Categoria idiomas;
     private Double numeroDeDescargas;
-    private AutorRepository autorRepository;
 
     public Libro(){
 
@@ -33,31 +32,9 @@ public class Libro {
 
     public Libro(DatosLibro datosLibro){
         this.titulo = datosLibro.titulo();
-        //this.autoresLista = datosLibro.autoresLista().stream()
-
-        //List<Autor> autores = new ArrayList<>();
-        //for (DatosAutor datosAutor : datosLibro.autoresLista()) {
-        //    Autor autor = new Autor(datosAutor);
-        //    autores.add(autor);
-        //}
-        //this.autoresLista = autores;
-
-                //.map(datosAutor -> new Autor(datosAutor)) // para generar Autor
-
-                //.map(Autor::new)
-                //.collect(Collectors.toList());
-        //this.autoresLista.forEach(a->a.setLibro(this));
         this.idiomas = Categoria.fromString(datosLibro.idiomas().get(0));
         this.numeroDeDescargas = datosLibro.numeroDeDescargas();
-        List<Autor> autores = datosLibro.autoresLista().stream()
-                .map(datosAutor -> {
-                    return autorRepository
-                            .findByNombre(datosAutor.nombre())
-                            .orElseGet(() -> autorRepository.save(new Autor(datosAutor)));
-                })
-                .toList();
-
-        this.autoresLista = autores;    }
+    }
 
     public Long getId() {
         return Id;
@@ -79,8 +56,8 @@ public class Libro {
         return autoresLista;
     }
 
-    public void setAutoresLista(List<Autor> autoresLista) {
-        this.autoresLista = autoresLista;
+    public void setAutoresLista(List<Autor> autores) {
+        this.autoresLista = autores;
     }
 
     public Categoria getIdiomas() {

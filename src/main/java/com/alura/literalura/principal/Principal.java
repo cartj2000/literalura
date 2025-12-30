@@ -4,9 +4,13 @@ import com.alura.literalura.model.*;
 import com.alura.literalura.repository.LibroRepository;
 import com.alura.literalura.service.ConsumoAPI;
 import com.alura.literalura.service.ConvierteDatos;
+import com.alura.literalura.service.LibroService;
+import org.springframework.stereotype.Component;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Component
 public class Principal {
 
     private Scanner teclado = new Scanner(System.in);
@@ -18,10 +22,14 @@ public class Principal {
     private List<Libro> librosLista;
     private String tituloLibro;
     private Optional<String> libroBuscadoOptional;
+    private final LibroService libroService;
 
-    public Principal(LibroRepository repository) {
-        this.repositorio = repository;
+    public Principal(LibroService libroService) {
+        this.libroService = libroService;
     }
+    //public Principal(LibroRepository repository) {
+    //    this.repositorio = repository;
+    //}
 
     public void muestraElMenu() {
         var opcion = -1;
@@ -97,11 +105,14 @@ public class Principal {
                 System.out.println(" Libro encontrado\n");
                 System.out.println("Los datos son: " + libroBuscadoOptional.get());
                 //if(repositorio.existsByTitulo(libroBuscadoOptional.get().titulo())){
-                if(buscarLibroEnDB(libroBuscadoOptional.get().titulo())) {
+                //if(buscarLibroEnDB(libroBuscadoOptional.get().titulo())) {
+                if(libroService.existeLibro(tituloLibro)){
                     System.out.println("No se puede registrar el mismo libro más de una vez");
+                    return;
                 } else {
-                    Libro libro = new Libro(libroBuscadoOptional.get());
-                    repositorio.save(libro);
+                    //Libro libro = new Libro(libroBuscadoOptional.get());
+                    //repositorio.save(libro);
+                    libroService.guardarLibro(libroBuscadoOptional.get());
                     System.out.println("----- LIBRO -----\n");
                     System.out.println("Título: " + libroBuscadoOptional.get().titulo() + "\n");
                     System.out.println("Autor: " + libroBuscadoOptional.get().autoresLista() + "\n");
