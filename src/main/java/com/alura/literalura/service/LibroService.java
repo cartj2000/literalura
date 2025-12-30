@@ -67,4 +67,9 @@ public class LibroService {
     public boolean existeLibro(String titulo) {
         return libroRepository.existsByTitulo(titulo);
     }
+
+    public List<Libro> listarLibrosRegistrados(){
+        return libroRepository.findAll();
+    }
+
 }

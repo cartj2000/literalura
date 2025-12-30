@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface LibroRepository extends JpaRepository<Libro, Long> {
     boolean existsByTitulo(String titulo);
     Optional<Libro> findByTitulo(String titulo);
+
 }

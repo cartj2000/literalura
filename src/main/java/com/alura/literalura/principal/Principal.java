@@ -17,7 +17,7 @@ public class Principal {
     private ConsumoAPI consumoApi = new ConsumoAPI();
     private static final String URL_BASE = "https://gutendex.com/books/";
     private ConvierteDatos conversor = new ConvierteDatos();
-    private LibroRepository repositorio;
+    //private LibroRepository repositorio;
     private List<DatosLibro> datosLibroList = new ArrayList<>();
     private List<Libro> librosLista;
     private String tituloLibro;
@@ -126,9 +126,9 @@ public class Principal {
         }
     }
 
-    private boolean buscarLibroEnDB(String tituloEnBD){
-        return repositorio.findByTitulo(tituloEnBD).isPresent();
-    }
+    //private boolean buscarLibroEnDB(String tituloEnBD){
+    //    return repositorio.findByTitulo(tituloEnBD).isPresent();
+    //}
 
     private void menuListarLibrosPorIdioma() {
         var opcionIdioma = "";
@@ -164,8 +164,27 @@ public class Principal {
     }
 
     private void listarLibrosRegistrados(){
+        List<Libro> librosAListar = libroService.listarLibrosRegistrados();
+        if (librosAListar.isEmpty()) {
+            System.out.println("No hay libros registrados");
+            return;
+        }
 
-    };
+        //librosAListar.stream()
+        //        .forEach(libro -> System.out.println(libro));
+        //librosAListar.stream().forEach(System.out::println);
+        //librosAListar.forEach(System.out::println);
+
+        librosAListar.forEach(libro -> {
+            System.out.println("------- LIBRO -------");
+            System.out.println("Título: " + libro.getTitulo());
+            System.out.println("Autores: " + libro.getAutoresLista());
+            System.out.println("Idioma: " + libro.getIdiomas());
+            System.out.println("Descargas: " + libro.getNumeroDeDescargas());
+            System.out.println("---------------------");
+        });
+
+    }
 
     private void listarAutoresRegistrados(){
 
