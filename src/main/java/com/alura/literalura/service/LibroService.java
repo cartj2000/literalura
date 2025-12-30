@@ -98,7 +98,7 @@ public class LibroService {
     public void listarAutoresConLibros(){
         List<Autor> autoresAListar = autorRepository.findAll();
         if (autoresAListar.isEmpty()) {
-            System.out.println("No hay libros registrados");
+            System.out.println("No hay autores registrados");
             return;
         }
 
@@ -119,4 +119,32 @@ public class LibroService {
             System.out.println("---------------------");
         });
     }
+
+    @Transactional
+    //public List<Autor> listarAutoresVivos(){
+    public void autoresVivosPorYear(Integer year){
+        List<Autor> autoresAListar = autorRepository.consultarAutoresVivos(year);
+        if (autoresAListar.isEmpty()) {
+            System.out.println("No hay Autores vivos en el año: " + year);
+            return;
+        }
+
+        //autoresAListar.stream()
+        //        .forEach(autor -> System.out.println(libro));
+        //autoresAListar.stream().forEach(System.out::println);
+        //autoresAListar.forEach(System.out::println);
+
+        autoresAListar.forEach(autor -> {
+            System.out.println("------- AUTOR -------");
+            System.out.println("Autor: " + autor.getNombre());
+            System.out.println("Fecha de nacimiento: " + autor.getA_Nacimiento());
+            System.out.println("Fecha de fallecimiento: " + autor.getA_Fallecimiento());
+            System.out.println("Libros: " +
+                    autor.getLibros().stream()
+                            .map(Libro::getTitulo)
+                            .toList());
+            System.out.println("---------------------");
+        });
+    }
+
 }

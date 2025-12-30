@@ -7,6 +7,7 @@ import com.alura.literalura.service.ConvierteDatos;
 import com.alura.literalura.service.LibroService;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -172,7 +173,18 @@ public class Principal {
     }
 
     private void listarAutoresVivos(){
-
+        System.out.println("Ingrese el año vivo de autor(es) que desea buscar");
+        String entrada = teclado.nextLine();
+        try{
+            Integer yearParaConsulta = Integer.parseInt(entrada);
+            if(yearParaConsulta < 0 || yearParaConsulta > LocalDate.now().getYear()){
+                System.out.println("Ingrese un año válido");
+                return;
+            }
+            libroService.autoresVivosPorYear(yearParaConsulta);
+        } catch (NumberFormatException e){
+            System.out.println("Entrada inválida. Por favor ingrese un año válido (solo números).");
+        }
     }
 
     private void buscarLibrosSPANISH(){
