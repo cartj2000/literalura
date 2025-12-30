@@ -65,6 +65,18 @@ public class Principal {
                 case 5:
                     menuListarLibrosPorIdioma();
                     break;
+                case 6:
+                    top10LibrosMasDescargados();
+                    break;
+                case 7:
+                    listarAutorPorNombre();
+                    break;
+                case 8:
+                    listarAutorPorNacimiento();
+                    break;
+                case 9:
+                    listarAutorPorFallecimiento();
+                    break;
                 case 0:
                     System.out.println("Cerrando la aplicación...");
                     break;
@@ -179,5 +191,57 @@ public class Principal {
     private void listarLibrosporIdioma(Categoria idiomaParaConsulta){
         libroService.librosPorIdioma(idiomaParaConsulta);
     }
+
+    private void top10LibrosMasDescargados(){
+        libroService.librosMasDescargados();
+    }
+
+    private void listarAutorPorNombre(){
+        System.out.println("Ingrese el nombre del autor que desea buscar");
+        String entrada = teclado.nextLine().trim();
+        if(entrada.isEmpty()){
+            System.out.println("Ingrese un nombre válido");
+            return;
+        }
+        if (!entrada.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+            System.out.println("El nombre solo puede contener letras y espacios");
+            return;
+        }
+
+        entrada = entrada.replaceAll("\\s+", " ");
+
+        libroService.autorPorNombre(entrada);
+    }
+
+    private void listarAutorPorNacimiento(){
+        System.out.println("Ingrese el año de nacimiento que desea buscar");
+        String entrada = teclado.nextLine();
+        try{
+            Integer yearParaConsulta = Integer.parseInt(entrada);
+            if(yearParaConsulta < 0 || yearParaConsulta > LocalDate.now().getYear()){
+                System.out.println("Ingrese un año válido");
+                return;
+            }
+            libroService.autorPorNacimiento(yearParaConsulta);
+        } catch (NumberFormatException e){
+            System.out.println("Entrada inválida. Por favor ingrese un año válido (solo números).");
+        }
+    }
+
+    private void listarAutorPorFallecimiento(){
+        System.out.println("Ingrese el año de fallecimiento que desea buscar");
+        String entrada = teclado.nextLine();
+        try{
+            Integer yearParaConsulta = Integer.parseInt(entrada);
+            if(yearParaConsulta < 0 || yearParaConsulta > LocalDate.now().getYear()){
+                System.out.println("Ingrese un año válido");
+                return;
+            }
+            libroService.autorPorFallecimiento(yearParaConsulta);
+        } catch (NumberFormatException e){
+            System.out.println("Entrada inválida. Por favor ingrese un año válido (solo números).");
+        }
+    }
+
 
 }
