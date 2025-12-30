@@ -1,6 +1,7 @@
 package com.alura.literalura.service;
 
 import com.alura.literalura.model.Autor;
+import com.alura.literalura.model.Categoria;
 import com.alura.literalura.model.DatosLibro;
 import com.alura.literalura.model.Libro;
 import com.alura.literalura.repository.AutorRepository;
@@ -66,7 +67,8 @@ public class LibroService {
     }
 
     public boolean existeLibro(String titulo) {
-        return libroRepository.existsByTitulo(titulo);
+        return libroRepository.existsByTituloIgnoreCase(titulo.trim());
+        //return libroRepository.existsByTitulo(titulo);
     }
 
     //public List<Libro> sacarLibrosRegistrados(){
@@ -145,6 +147,30 @@ public class LibroService {
                             .toList());
             System.out.println("---------------------");
         });
+    }
+
+    //public List<Libro> librosPorIdioma(String idioma){
+    public void librosPorIdioma(Categoria idioma){
+        List<Libro> librosAListar = libroRepository.consultarLibrosPorIdioma(idioma);
+        if (librosAListar.isEmpty()) {
+            System.out.println("No hay libros registrados");
+            return;
+        }
+
+        //librosAListar.stream()
+        //        .forEach(libro -> System.out.println(libro));
+        //librosAListar.stream().forEach(System.out::println);
+        //librosAListar.forEach(System.out::println);
+
+        librosAListar.forEach(libro -> {
+            System.out.println("------- LIBRO -------");
+            System.out.println("Título: " + libro.getTitulo());
+            System.out.println("Autores: " + libro.getAutoresLista());
+            System.out.println("Idioma: " + libro.getIdiomas());
+            System.out.println("Descargas: " + libro.getNumeroDeDescargas());
+            System.out.println("---------------------");
+        });
+
     }
 
 }

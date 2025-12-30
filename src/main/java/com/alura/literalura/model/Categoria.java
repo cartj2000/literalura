@@ -12,7 +12,6 @@ public enum Categoria {
         this.idioma = idioma;
     }
 
-
     public static Categoria fromString(String text) {
         for (Categoria categoria : Categoria.values()) {
             if (categoria.idioma.equalsIgnoreCase(text)) {

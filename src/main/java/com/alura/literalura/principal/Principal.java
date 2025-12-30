@@ -105,9 +105,10 @@ public class Principal {
             if(libroBuscadoOptional.isPresent()) {
                 System.out.println(" Libro encontrado\n");
                 System.out.println("Los datos son: " + libroBuscadoOptional.get());
+                String tituloReal = libroBuscadoOptional.get().titulo();
                 //if(repositorio.existsByTitulo(libroBuscadoOptional.get().titulo())){
                 //if(buscarLibroEnDB(libroBuscadoOptional.get().titulo())) {
-                if(libroService.existeLibro(tituloLibro)){
+                if(libroService.existeLibro(tituloReal)){
                     System.out.println("No se puede registrar el mismo libro más de una vez");
                     return;
                 } else {
@@ -132,7 +133,7 @@ public class Principal {
     //}
 
     private void menuListarLibrosPorIdioma() {
-        var opcionIdioma = "";
+        String opcionIdioma = "";
         while (!(opcionIdioma.equals("es")||opcionIdioma.equals("en")||opcionIdioma.equals("fr")||opcionIdioma.equals("pt"))) {
             var menuIdioma = """
                     Ingrese el idioma para buscar los libros:
@@ -143,24 +144,12 @@ public class Principal {
                     """;
             System.out.println(menuIdioma);
             opcionIdioma = teclado.nextLine();
-            teclado.nextLine();
-
-            switch (opcionIdioma) {
-                case "es":
-                    buscarLibrosSPANISH();
-                    break;
-                case "en":
-                    buscarLibrosENGLISH();
-                    break;
-                case "fr":
-                    buscarLibrosFRENCH();
-                    break;
-                case "pt":
-                    buscarLibrosPORTUGUESE();
-                    break;
-                default:
-                    System.out.println("Opción Inválida");
-            }
+        }
+        try {
+            Categoria categoriaIdioma = Categoria.fromString(opcionIdioma);
+            listarLibrosporIdioma(categoriaIdioma);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Idioma inválido.");
         }
     }
 
@@ -187,20 +176,8 @@ public class Principal {
         }
     }
 
-    private void buscarLibrosSPANISH(){
-
+    private void listarLibrosporIdioma(Categoria idiomaParaConsulta){
+        libroService.librosPorIdioma(idiomaParaConsulta);
     }
-
-    private void buscarLibrosENGLISH(){
-
-    }
-
-    private void buscarLibrosFRENCH(){
-
-    }
-
-    private void buscarLibrosPORTUGUESE(){
-
-    };
 
 }
