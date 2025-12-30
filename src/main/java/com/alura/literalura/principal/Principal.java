@@ -164,31 +164,12 @@ public class Principal {
     }
 
     private void listarLibrosRegistrados(){
-        List<Libro> librosAListar = libroService.listarLibrosRegistrados();
-        if (librosAListar.isEmpty()) {
-            System.out.println("No hay libros registrados");
-            return;
-        }
-
-        //librosAListar.stream()
-        //        .forEach(libro -> System.out.println(libro));
-        //librosAListar.stream().forEach(System.out::println);
-        //librosAListar.forEach(System.out::println);
-
-        librosAListar.forEach(libro -> {
-            System.out.println("------- LIBRO -------");
-            System.out.println("Título: " + libro.getTitulo());
-            System.out.println("Autores: " + libro.getAutoresLista());
-            System.out.println("Idioma: " + libro.getIdiomas());
-            System.out.println("Descargas: " + libro.getNumeroDeDescargas());
-            System.out.println("---------------------");
-        });
-
+        libroService.sacarLibrosRegistrados();
     }
 
     private void listarAutoresRegistrados(){
-
-    };
+        libroService.listarAutoresConLibros();
+    }
 
     private void listarAutoresVivos(){
 
