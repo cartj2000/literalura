@@ -1,7 +1,6 @@
 package com.alura.literalura.service;
 
 import com.alura.literalura.model.Autor;
-import com.alura.literalura.model.Categoria;
 import com.alura.literalura.model.DatosLibro;
 import com.alura.literalura.model.Libro;
 import com.alura.literalura.repository.AutorRepository;
@@ -10,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
-import java.util.DoubleSummaryStatistics;
-import java.util.IntSummaryStatistics;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -153,7 +149,7 @@ public class LibroService {
     }
 
     //public List<Libro> librosPorIdioma(String idioma){
-    public void librosPorIdioma(Categoria idioma){
+    public void librosPorIdioma(String idioma){
         List<Libro> librosAListar = libroRepository.consultarLibrosPorIdioma(idioma);
         if (librosAListar.isEmpty()) {
             System.out.println("No hay libros registrados");
@@ -178,7 +174,9 @@ public class LibroService {
         //Trabajando con estadisticas
         IntSummaryStatistics est = librosAListar.stream()
                 .collect(Collectors.summarizingInt(libro->libro.getTitulo().length()));
+        System.out.println("------------------------------------");
         System.out.println("Cantidad de libros por idioma: " + est.getCount());
+        System.out.println("------------------------------------");
 
     }
 
@@ -194,7 +192,9 @@ public class LibroService {
         //librosAListar.stream().forEach(System.out::println);
         //librosAListar.forEach(System.out::println);
 
+        System.out.println("------------------------------------");
         System.out.println("Top 10 libros más descargados");
+        System.out.println("------------------------------------");
         librosAListar.stream()
                 .sorted(Comparator.comparing(Libro::getNumeroDeDescargas).reversed())
                 .limit(10)
@@ -207,12 +207,15 @@ public class LibroService {
                 .limit(10)
                 .filter(l -> l.getNumeroDeDescargas() > 0.0)
                 .collect(Collectors.summarizingDouble(Libro::getNumeroDeDescargas));
+        System.out.println("------------------------------------");
         System.out.println("Media de descargas: " + est.getAverage());
         System.out.println("Cantidad máxima de descargas: " + est.getMax());
         System.out.println("Cantidad mínima de descargas: " + est.getMin());
         System.out.println("Cantidad de registros evaluados para calcular las estadisticas: " + est.getCount());
+        System.out.println("------------------------------------");
     }
 
+    @Transactional
     public void autorPorNombre(String nombre){
 
         if (nombre == null || nombre.isBlank()) {
@@ -220,10 +223,43 @@ public class LibroService {
             return;
         }
 
-        List<Autor> autoresAListar = autorRepository.findAutorByNombre(nombre);
+        //List<Autor> autoresAListar = autorRepository.findAutorByNombre(nombre);
+        //List<Autor> autoresAListar = autorRepository.findByNombreIgnoreCase(nombre);
+
+
+
+        String textoNormalizado = nombre
+                .toLowerCase()
+                .replace(",", " ")
+                .replaceAll("\\s+", " ")
+                .trim();
+
+        //String[] partes = textoNormalizado.split(" ");
+        String palabraClave = textoNormalizado.split(" ")[0];
+
+        //// Buscar autores que contengan todas las partes
+        //List<Autor> autoresAListar = autorRepository.findAll().stream()
+        //        .filter(autor -> {
+        //            String nombreAutor = autor.getNombre().toLowerCase();
+        //            for (String parte : partes) {
+        //                if (!nombreAutor.contains(parte)) {
+        //                    return false;
+        //                }
+        //            }
+        //            return true;
+        //        })
+        //        .toList();
+        List<Autor> autoresAListar = autorRepository
+                .findByNombreContainingIgnoreCase(palabraClave)
+                .stream()
+                .filter(a -> Arrays.stream(textoNormalizado.split(" "))
+                        .allMatch(p -> a.getNombre().toLowerCase().contains(p)))
+                .toList();
+
+
 
         if (autoresAListar.isEmpty()) {
-            System.out.println("No hay autores registrados");
+            System.out.println("No se encontraron autores");
             return;
         }
 
@@ -244,6 +280,8 @@ public class LibroService {
             System.out.println("---------------------");
         });
     }
+
+    @Transactional
     public void autorPorNacimiento(Integer year){
         List<Autor> autoresAListar = autorRepository.findAutorByANacimiento(year);
         if (autoresAListar.isEmpty()) {
@@ -269,6 +307,7 @@ public class LibroService {
         });
     }
 
+    @Transactional
     public void autorPorFallecimiento(Integer year){
         List<Autor> autoresAListar = autorRepository.findAutorByAFallecimiento(year);
         if (autoresAListar.isEmpty()) {

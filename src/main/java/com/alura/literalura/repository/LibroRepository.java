@@ -14,6 +14,6 @@ public interface LibroRepository extends JpaRepository<Libro, Long> {
     Optional<Libro> findByTitulo(String titulo);
 
     @Query("SELECT l FROM Libro l WHERE l.idiomas = :idioma")
-    List<Libro> consultarLibrosPorIdioma(Categoria idioma);
+    List<Libro> consultarLibrosPorIdioma(String idioma);
 
 }

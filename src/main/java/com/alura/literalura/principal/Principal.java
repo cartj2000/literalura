@@ -33,6 +33,7 @@ public class Principal {
     //}
 
     public void muestraElMenu() {
+        String entrada;
         var opcion = -1;
         while (opcion != 0) {
             var menu = """
@@ -42,46 +43,37 @@ public class Principal {
                     3 - listar autores registrados
                     4 - listar autores vivos en un determinado año
                     5 - listar libros por idioma
+                    6 - top 10 libros más descargados
+                    7 - listar autores por nombre
+                    8 - listar autores por nacimiento
+                    9 - listar autores por fallecimiento
                     
                     0 - Salir
                     """;
             System.out.println(menu);
-            opcion = teclado.nextInt();
-            teclado.nextLine();
+            System.out.println("Opcion: ");
+            entrada = teclado.nextLine().trim();
+
+            // Validación: solo números
+            if (!entrada.matches("\\d+")) {
+                System.out.println("Debe ingresar un número válido\n");
+                continue;
+            }
+
+            opcion = Integer.parseInt(entrada);
 
             switch (opcion) {
-                case 1:
-                    buscarLibrosPorTitulo();
-                    break;
-                case 2:
-                    listarLibrosRegistrados();
-                    break;
-                case 3:
-                    listarAutoresRegistrados();
-                    break;
-                case 4:
-                    listarAutoresVivos();
-                    break;
-                case 5:
-                    menuListarLibrosPorIdioma();
-                    break;
-                case 6:
-                    top10LibrosMasDescargados();
-                    break;
-                case 7:
-                    listarAutorPorNombre();
-                    break;
-                case 8:
-                    listarAutorPorNacimiento();
-                    break;
-                case 9:
-                    listarAutorPorFallecimiento();
-                    break;
-                case 0:
-                    System.out.println("Cerrando la aplicación...");
-                    break;
-                default:
-                    System.out.println("Opción Inválida");
+                case 1 -> buscarLibrosPorTitulo();
+                case 2 -> listarLibrosRegistrados();
+                case 3 -> listarAutoresRegistrados();
+                case 4 -> listarAutoresVivos();
+                case 5 -> menuListarLibrosPorIdioma();
+                case 6 -> top10LibrosMasDescargados();
+                case 7 -> listarAutorPorNombre();
+                case 8 -> listarAutorPorNacimiento();
+                case 9 -> listarAutorPorFallecimiento();
+                case 0 -> System.out.println("Cerrando la aplicación...");
+                default -> System.out.println("Opción inválida\n");
             }
         }
     }
@@ -157,12 +149,13 @@ public class Principal {
             System.out.println(menuIdioma);
             opcionIdioma = teclado.nextLine();
         }
-        try {
-            Categoria categoriaIdioma = Categoria.fromString(opcionIdioma);
-            listarLibrosporIdioma(categoriaIdioma);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Idioma inválido.");
-        }
+        //try {
+        //    Categoria categoriaIdioma = Categoria.fromString(opcionIdioma);
+        //    listarLibrosporIdioma(categoriaIdioma);
+        //} catch (IllegalArgumentException e) {
+        //    System.out.println("Idioma inválido.");
+        //}
+        listarLibrosporIdioma(opcionIdioma);
     }
 
     private void listarLibrosRegistrados(){
@@ -178,7 +171,7 @@ public class Principal {
         String entrada = teclado.nextLine();
         try{
             Integer yearParaConsulta = Integer.parseInt(entrada);
-            if(yearParaConsulta < 0 || yearParaConsulta > LocalDate.now().getYear()){
+            if(yearParaConsulta > LocalDate.now().getYear()){
                 System.out.println("Ingrese un año válido");
                 return;
             }
@@ -188,7 +181,7 @@ public class Principal {
         }
     }
 
-    private void listarLibrosporIdioma(Categoria idiomaParaConsulta){
+    private void listarLibrosporIdioma(String idiomaParaConsulta){
         libroService.librosPorIdioma(idiomaParaConsulta);
     }
 
@@ -203,12 +196,12 @@ public class Principal {
             System.out.println("Ingrese un nombre válido");
             return;
         }
-        if (!entrada.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
-            System.out.println("El nombre solo puede contener letras y espacios");
+        if (!entrada.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ, ]+")) {
+            System.out.println("El nombre solo puede contener letras, espacios y coma");
             return;
         }
 
-        entrada = entrada.replaceAll("\\s+", " ");
+        //entrada = entrada.replaceAll("\\s+", " ");
 
         libroService.autorPorNombre(entrada);
     }
@@ -218,7 +211,7 @@ public class Principal {
         String entrada = teclado.nextLine();
         try{
             Integer yearParaConsulta = Integer.parseInt(entrada);
-            if(yearParaConsulta < 0 || yearParaConsulta > LocalDate.now().getYear()){
+            if(yearParaConsulta > LocalDate.now().getYear()){
                 System.out.println("Ingrese un año válido");
                 return;
             }
@@ -233,11 +226,11 @@ public class Principal {
         String entrada = teclado.nextLine();
         try{
             Integer yearParaConsulta = Integer.parseInt(entrada);
-            if(yearParaConsulta < 0 || yearParaConsulta > LocalDate.now().getYear()){
+            libroService.autorPorFallecimiento(yearParaConsulta);
+            if(yearParaConsulta > LocalDate.now().getYear()){
                 System.out.println("Ingrese un año válido");
                 return;
             }
-            libroService.autorPorFallecimiento(yearParaConsulta);
         } catch (NumberFormatException e){
             System.out.println("Entrada inválida. Por favor ingrese un año válido (solo números).");
         }

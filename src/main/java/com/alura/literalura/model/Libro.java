@@ -22,8 +22,9 @@ public class Libro {
             inverseJoinColumns = @JoinColumn(name = "autor_id")
     )
     private List<Autor> autoresLista;
-    @Enumerated(EnumType.STRING)
-    private Categoria idiomas;
+    //@Enumerated(EnumType.STRING)
+    //private Categoria idiomas;
+    private String idiomas;
     private Double numeroDeDescargas;
 
     public Libro(){
@@ -32,7 +33,8 @@ public class Libro {
 
     public Libro(DatosLibro datosLibro){
         this.titulo = datosLibro.titulo();
-        this.idiomas = Categoria.fromString(datosLibro.idiomas().get(0));
+        //this.idiomas = Categoria.fromString(datosLibro.idiomas().get(0));
+        this.idiomas = datosLibro.idiomas().get(0);
         this.numeroDeDescargas = datosLibro.numeroDeDescargas();
     }
 
@@ -60,11 +62,11 @@ public class Libro {
         this.autoresLista = autores;
     }
 
-    public Categoria getIdiomas() {
+    public String getIdiomas() {
         return idiomas;
     }
 
-    public void setIdiomas(Categoria idiomas) {
+    public void setIdiomas(String idiomas) {
         this.idiomas = idiomas;
     }
 
