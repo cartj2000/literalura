@@ -1,6 +1,6 @@
 
 <p align="center"> <strong>Desafío LiterAlura</strong>
-<br> Proyecto Java con Spring, Jackson, Hibernate, PostgreSQL, JPA, maven, Gutendex API, validaciones, pruebas y arquitectura limpia. </p>
+<br> Proyecto usando: Java, Gutendex API, Jackson, Spring, Hibernate, PostgreSQL, Maven, validaciones, pruebas y arquitectura limpia. </p>
 
 <h1 align="center">Hola , mi nombre es Carlos <img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" width="35"></h1>
 <picture> <img align="right" src="https://github.com/7oSkaaa/7oSkaaa/blob/main/Images/Right_Side.gif?raw=true" width = 250px></picture>
@@ -39,7 +39,7 @@ Ingreso del número 5:	listar libros por idioma -> En la base de datos pueden ex
 
 Ingreso del número 6:	top 10 libros más descargados
 
-Ingreso del número 7:	listar autores por nombre
+Ingreso del número 7:	listar autores por nombre - encuentra autores tanto por nombre como por apellido
 
 Ingreso del número 8:	listar autores por nacimiento -> el año puede ser negativo (A.C.)
 
