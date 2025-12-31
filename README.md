@@ -1,6 +1,6 @@
 
 <p align="center"> <strong>Desafío LiterAlura</strong>
-<br> Proyecto Java con Spring, Jackson, Hibernate, validaciones, pruebas y arquitectura limpia. </p>
+<br> Proyecto Java con Spring, Jackson, Hibernate, PostgreSQL, JPA, maven, Gutendex API, validaciones, pruebas y arquitectura limpia. </p>
 
 <h1 align="center">Hola , mi nombre es Carlos <img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" width="35"></h1>
 <picture> <img align="right" src="https://github.com/7oSkaaa/7oSkaaa/blob/main/Images/Right_Side.gif?raw=true" width = 250px></picture>
@@ -14,7 +14,7 @@
 
 ✔ Resultado testeados y validados
 
-✔ busqueda optimizada en listar autores por nombre para nombre o apellido
+✔ busqueda optimizada en listar autores por nombre para nombre ó apellido
 
 ✔ Inyección de dependencias (DI): AutorRepository y LibroRepository inyectados automáticamente -> LibroService (@Service) -> Principal como un bean de Spring (@Component)
 
@@ -35,7 +35,7 @@ Ingreso del número 3:	listar autores registrados
 
 Ingreso del número 4:	listar autores vivos en un determinado año
 
-Ingreso del número 5:	listar libros por idioma
+Ingreso del número 5:	listar libros por idioma En la base de datos pueden existir todos, por ejemplo italiano, alemán, etc y se filtran solo 4: (fr - francés, pt - portugués, es - español, en - inglés)
 
 Ingreso del número 6:	top 10 libros más descargados
 
@@ -51,11 +51,19 @@ Ingreso del número 0:	Finaliza la aplicación
 ## :rocket:
 🚀 Tecnologías usadas :rocket:
 
-Java 17:	Lógica principal del sistema
+Java 17: Lógica principal del sistema
 
-Gutendex API	Obtención de ebook
+Gutendex API: Obtención de ebook
 
-Jackson	Procesamiento de JSON
+Jackson: Procesamiento de JSON
+
+Spring: Framework para Inversión de Control (IoC), Programación Orientada a Aspectos (AOP) y Spring Boot para automatización.
+
+Hibernate: Framework para mapeo objeto relacional e implementación de Java Persistence API (JPA)
+
+PostgreSQL: Base de datos relacional
+
+Maven: Gestión de librerias (dependencias)
 
 SOLID / Arquitectura Limpia	Diseño desacoplado, extensible y testeable
 
@@ -69,7 +77,6 @@ SRP — Single Responsibility Principle
 Cada clase tiene una única responsabilidad.
 
 OCP — Open/Closed Principle
-
 
 Abierto a extensión | Cerrado a modificación
 
