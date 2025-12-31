@@ -12,7 +12,7 @@
 
 ✔ Evita entrada de datos inválidos: entradas mal digitadas, repetición de libros, opciones del menú inconsistentes
 
-✔ Resultado testeados y validados
+✔ Resultados testeados y validados
 
 ✔ busqueda optimizada en listar autores por nombre para nombre ó apellido
 
