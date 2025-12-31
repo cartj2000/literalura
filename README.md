@@ -25,7 +25,7 @@
 ## :pencil2:
 📌 Operación del programa
 
-Usuario ingresa un número entre 1 y 9:	Selecciona tipo de conversión
+Usuario ingresa un número entre 1 y 9:	Selecciona la opción:
 
 Ingreso del número 1:	buscar libros por título
 
@@ -105,8 +105,6 @@ Constructor injection para dependencia obligatoria
 
 LibroService
 
-Conversor no instancia servicios, solo los recibe (DI/IoC)
-
 Manejo de errores en la entrada de datos
 
 Clases pequeñas con responsabilidad única (SRP) para aplicar OCP
@@ -120,7 +118,9 @@ Estructura de paquetes:
 src/
 └── com/alura/literalura/
 
-├── ├── Autor.java
+├── model/
+
+│   ├── Autor.java
 
 │   ├── Categoria.java
 
