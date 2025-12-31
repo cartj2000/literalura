@@ -33,17 +33,17 @@ Ingreso del número 2:	listar libros registrados
 
 Ingreso del número 3:	listar autores registrados
 
-Ingreso del número 4:	listar autores vivos en un determinado año
+Ingreso del número 4:	listar autores vivos en un determinado año -> el año puede ser negativo (A.C.) 
 
-Ingreso del número 5:	listar libros por idioma En la base de datos pueden existir todos, por ejemplo italiano, alemán, etc y se filtran solo 4: (fr - francés, pt - portugués, es - español, en - inglés)
+Ingreso del número 5:	listar libros por idioma -> En la base de datos pueden existir todos, por ejemplo italiano, alemán, etc y se filtran solo 4: (fr - francés, pt - portugués, es - español, en - inglés)
 
 Ingreso del número 6:	top 10 libros más descargados
 
 Ingreso del número 7:	listar autores por nombre
 
-Ingreso del número 8:	listar autores por nacimiento
+Ingreso del número 8:	listar autores por nacimiento -> el año puede ser negativo (A.C.)
 
-Ingreso del número 9:	listar autores por nacimiento
+Ingreso del número 9:	listar autores por nacimiento -> el año puede ser negativo (A.C.)
 
 Ingreso del número 0:	Finaliza la aplicación
 
